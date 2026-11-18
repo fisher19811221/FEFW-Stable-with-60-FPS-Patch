@@ -405,7 +405,7 @@ fullscreen. It widens the 3D camera and keeps the HUD, menus and movies centred 
 version 1.1.0 (build ID DB93B0125F485060).
 "@
         @"
-Fortune's Eden (FEFW Stable with 60 FPS Patch) v1.6.8.6 - portable Windows x64 build
+Fortune's Eden (FEFW Stable with 60 FPS Patch) v1.7.5.4 - portable Windows x64 build
 (Eden FE: Fortune's Weave fork, built on Duck912's eden-ns2-fe and xDarkWindx's eden-fefw $Version)
 
 Runs on any 64-bit Windows 10/11 PC with a Vulkan-capable GPU. No CPU-specific code
@@ -413,7 +413,7 @@ and the Microsoft C++ runtime is included, so nothing needs installing.
 
 GETTING STARTED
 1. Extract this whole folder somewhere (not inside Program Files) and run Fortune's Eden.exe.
-2. Add your game folder: double-click the empty game list and choose the folder.
+2. Add your game folder: press Choose game folder on the home screen and choose the folder.
 
 LEGAL USE ONLY. Piracy is not acceptable and is not supported in any way. No games, keys,
 firmware or other Nintendo files are included. Use your own legally obtained copy of the game, dumped from your own
@@ -428,12 +428,13 @@ touch any other Eden install. To move it, move the whole folder. Deleting it del
 SETTINGS are already set up (Emulation > Configure), so they apply however the game is dumped
 or packed: the 12 GB memory layout the game needs, GPU mode Fast and ASTC recompression Auto
 are always used; asynchronous shaders on, vsync Mailbox, 16x anisotropic filtering and VRAM
-Usage Mode Conservative are the defaults. Settings has seven pages (General, System, Graphics,
-Performance, Audio, Controls, Advanced); Game Settings only has the game's add-ons and input profiles.
+Usage Mode Conservative are the defaults. Settings has eight pages (General, System, Graphics,
+Performance, Audio, Controls, Mouse mode, Advanced); Game Settings only has the game's add-ons and input profiles.
 Pick the resolution so the output matches your screen (1.5X for 4K).
 Only controls need setting: Emulation > Configure > Controls.
-The launch screen has the main ones beside Play: 60 FPS, Ultrawide, HDR (with paper white),
-Upscaler, Upscaler quality, Frame generation, and a button to the Performance page.
+The home screen has the main ones under Play: 60 FPS, Ultrawide, HDR (with paper white),
+HD Rumble, Upscaler, Upscaler quality, Frame generation, Button icons, and a button to the
+Performance page.
 
 Upscaler: Emulation > Configure > Graphics > Upscaler. Takes effect when the game starts.
 - AMD FSR 3.1 (default, any card): replaces the game's own DLSS network, which takes work off
@@ -456,14 +457,114 @@ HDR (optional): turn on HDR in Windows, tick "HDR output (HDR10)" in Graphics an
 game; its Brightness and UI Brightness options then work. Restart the game after changing it.
 
 Frame generation (experimental, off by default): Graphics > Frame generation, or the launch
-screen. Makes a frame between each two of the game's, so 60 FPS shows as 120, in the 3D scenes.
-Needs a display faster than the game's frame rate (120 Hz or more for 60 FPS).
-- AMD FSR 3.1: any card (AMD's FidelityFX SDK, MIT).
+screen. Makes frames between the game's, in the 3D scenes: at 2x 60 FPS shows as 120; at 3x
+and 4x (Frames / Multi frame generation) two or three are made for each of the game's.
+- AMD FSR 3.1: any card (AMD's FidelityFX SDK, MIT). 2x, 3x and 4x.
 - NVIDIA DLSS: GeForce RTX 40/50 and hardware-accelerated GPU scheduling on in Windows. Choose
   it, then click "Download from NVIDIA" in the panel below the setting (NVIDIA's files aren't
-  included). Falls back to AMD's.
+  included). Falls back to AMD's. NVIDIA allows 3x and 4x on RTX 50 only; on RTX 40 and older,
+  Fortune's Eden offers to download the community MFG Unlocker (dashdogy, MIT, not included).
+  On those cards FSR 3.1 at 3x or 4x is usually smoother.
+Pacing: the game's frames are held to what the display can show with the made frames between
+them (165 Hz at 3x: about 54 a second). If you cap your frame rate (NVIDIA Reflex, RTSS,
+the driver), type your cap in "Your frame rate cap" so the frames fit under it.
 The status bar names the one running, next to the upscaler.
+
+HD Rumble (experimental, off by default): tick HD Rumble on the home screen, then restart
+Fortune's Eden (or reconnect the controller). The game's detailed vibration is played through
+RenHDrum (renhdrum.dll, MIT/Apache-2.0, licenses\renhdrum): HD Rumble on a Switch Pro
+Controller or Joy-Con, haptics on a DualSense, rumble on Xbox controllers, and the grips of the
+Steam Controller (2026, experimental). Off: the standard rumble, as before.
 $fpsText$optionalText
+
+New in v1.7.5.4:
+- No more texture pop-in at cutscene cuts (#74): a frame waits briefly for textures being read
+  from the texture cache on disk, and converts any still not ready on the GPU at once.
+
+New in v1.7.5.3:
+- No more black textures for a split second when arriving somewhere you've been: textures from
+  the texture cache on disk are read 4 at a time, and ones about to be drawn are uploaded first.
+
+New in v1.7.5.2:
+- Smoother on 10 and 12 GB graphics cards: video memory is cleaned up from 85% of what may be
+  used, as on 16 GB cards. On battle maps, selecting a unit no longer stutters after a long
+  session (#63).
+- NVIDIA DLSS frame generation no longer switches off and on for a moment when the game has
+  no motion for a frame or two in the middle of play.
+
+New in v1.7.5.1:
+- No more freezes on hard drives: the texture cache on disk is off when Fortune's Eden is on a
+  hard drive (its reads and writes slowed the game's own). It works as before on an SSD.
+
+New in v1.7.5:
+- Texture cache on disk (home screen: 2 GB by default, Off, 4 GB or 8 GB): textures, once
+  converted for your graphics card, are kept in user\cache\textures, so places you've been
+  load without stutter (#63). Most useful on cards with less video memory.
+- Steadier long sessions: video memory from earlier scenes is cleaned up, cards with 10 GB or
+  more keep more loaded, and bursts of new textures no longer stall the frame (#63).
+- DLDSR (fullscreen) on the home screen: with NVIDIA's DLDSR on (NVIDIA app > Graphics >
+  DSR - Factors), 1.78x or 2.25x makes fullscreen play at that resolution, for a sharper
+  picture with DLSS or DLAA. VSR on AMD cards. The desktop goes back to its own resolution
+  when you leave fullscreen or switch windows. 1X resolution is recommended (Use 1X button).
+- Fixes ported from Lichii and Orchid: geometry shaders are drawn, texture and memory fixes.
+- The Volume setting is back in Settings > Audio (#72).
+
+New in v1.7.4:
+- Multi frame generation: 2x, 3x or 4x (Frames on the home screen, Multi frame generation in
+  Settings > Graphics),
+  for AMD FSR 3.1 (any card) and NVIDIA DLSS (RTX 50, or RTX 40 and older with the community
+  MFG Unlocker, which Fortune's Eden offers to download).
+- Smoother frame generation: the game's frames are evenly spaced to fit your display (or your
+  frame rate cap, set in "Your frame rate cap"), instead of some being dropped.
+- NVIDIA DLSS keeps 3x or 4x when a game is started again.
+
+New in v1.7.3:
+- A home screen just for Fortune's Weave: its icon and title logo, Play, and the main settings.
+  The ... button adds a game folder, opens the save and mods folders, and installs updates or
+  DLC. No multiplayer menu.
+- Xbox or PlayStation button icons in the game (Button icons, on the home screen or in
+  Settings > Controls). They follow your controller mapping, and the mouse mode prompt shows
+  your own shortcut (Ctrl + Enter by default).
+- Frame generation no longer halves the frame rate for seconds at a time (#55): it only
+  pauses when the graphics card stays behind, and comes straight back.
+
+New in v1.7.2:
+- No more orange blocks and yellow bars on battle maps (#60).
+- No more black characters on some graphics cards (#69): the graphics card's BC7 textures are
+  checked as the game starts, and BC3 is used if they come out wrong.
+- Smoother exploring on graphics cards with less than 8 GB (#70): they use BC3 textures again.
+- No more blocky textures after one bad start (#71); the game no longer starts again after
+  stopping it with F5 (#67); sharp game icons on the home screen and in the game list (#68).
+
+New in v1.7.1:
+- Mouse mode has its own page in Settings (Configure > Mouse mode): sensitivity, whether the
+  scroll wheel zooms battle maps, and the controls used in mouse mode. The wheel only zooms on
+  battle maps now, and WASD works in mouse mode with a controller set up.
+- No more hang at game start on some AMD cards (#65): if the graphics driver can't build
+  the BC7 texture converter within 10 seconds, textures go to BC3 and the game starts.
+- Dagsion's sky no longer turns black after time in menus (#64); stutters no longer build up
+  over long sessions (#63); textures the game rewrites no longer come back wrong (#60).
+- Kompas9's ultrawide v1.2: the Stats page radar charts sit inside the 16:9 area.
+
+New in v1.7:
+- HD Rumble (experimental, off by default): see above.
+- Lips render properly (#56, #49), along with other textures that keep separate masks in red,
+  green and blue. The game's ASTC textures are re-compressed on the graphics card to BC7
+  instead of BC3: the same video memory, and more accurate across the board.
+
+New in v1.6.8.9:
+- No more broken textures or flashes after a few minutes in the same place (#60).
+
+New in v1.6.8.8:
+- NVIDIA DLSS frame generation no longer drags busy battles below 60 FPS.
+- Performance no longer drops map after map (#55): textures from the previous map are freed.
+- Discord Rich Presence can be turned on: Configure > General > Discord.
+
+New in v1.6.8.7:
+- 60 FPS mode: menus, the map and teleports run at their normal speed again (#51).
+- Fixed AMD FSR 3.1 frame generation crashes (#52) and NVIDIA DLSS frame generation crashes
+  when the window changes size; AMD FSR 4 works at 2x resolution and above (#53).
+- Pausing (F4) no longer fast-forwards cutscenes (#54); games in very deep folders load (#48).
 
 New in v1.6.8.6:
 - 60 FPS mode: menus, windows and other UI animations, and the letters of spoken text, now

@@ -5,6 +5,7 @@
 <p align="center">
   <a href="../../releases/latest"><img src="https://img.shields.io/github/v/release/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch?label=latest&color=e0b04a&style=for-the-badge" alt="Latest release"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-3a3448?style=for-the-badge" alt="Windows 10 or 11">
+  <img src="https://img.shields.io/badge/Linux-x86__64-3a3448?style=for-the-badge" alt="Linux x86_64">
   <a href="LICENSE"><img src="https://img.shields.io/badge/licence-GPL--3.0-8a2a3c?style=for-the-badge" alt="GPL-3.0 licence"></a>
 </p>
 
@@ -14,15 +15,31 @@
   <a href="#upscalers">Upscalers</a> &nbsp;·&nbsp;
   <a href="#troubleshooting">Troubleshooting</a> &nbsp;·&nbsp;
   <a href="CHANGELOG.md">Changelog</a> &nbsp;·&nbsp;
+  <a href="#credits-and-licence">Credits</a> &nbsp;·&nbsp;
   <a href="../../issues">Report a problem</a>
 </p>
 
-A portable, ready-to-play Windows build of the Eden emulator, made for *Fire Emblem: Fortune's Weave*. Unzip it, point it at your own copy of the game and press **Play**. Nothing to install, it updates itself, and it won't touch any other Eden setup you have.
+A portable, ready-to-play build of the Eden emulator for Windows (and Linux), made for *Fire Emblem: Fortune's Weave*. Unzip it, point it at your own copy of the game and press **Play**. Nothing to install, it updates itself, and it won't touch any other Eden setup you have.
 
-It builds on [Duck912's Fortune's Weave fork](https://github.com/Duck912/eden-ns2-fe) and [xDarkWindx's eden-fefw 1.12](https://github.com/xDarkWindx/eden-fefw/releases/tag/1.12).
+It builds on Duck912's Fortune's Weave fork (eden-ns2-fe) and xDarkWindx's eden-fefw 1.12.
 
-## What's new
+## What's new in v1.7.5 (and v1.7.5.1 to v1.7.5.4)
 
+- **Much less stutter in places you've been before** ([#63](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/63)): textures, once converted for your graphics card, are kept on disk (**Texture cache on disk** on the home screen: 2 GB by default, or Off, 4 GB or 8 GB), so they load instead of being converted again. Most useful on cards with less video memory. On a hard drive it stays off (v1.7.5.1), as it would slow the game's own reads.
+- **Steadier over long sessions** ([#63](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/63)): video memory from earlier scenes and dungeons is cleaned up, cards with 10 GB or more keep more loaded before cleaning up, and bursts of new textures no longer stall the frame.
+- **DLDSR in fullscreen:** with NVIDIA's DLDSR on, choose **1.78x** or **2.25x** on the home screen and fullscreen plays at that resolution, so DLSS or DLAA looks sharper still. On AMD cards it's **VSR**. The desktop goes back to its own resolution when you leave fullscreen or switch windows.
+- **Fixes ported from Lichii and Orchid:** geometry shaders are drawn instead of skipped, and texture and memory fixes, including for AMD cards.
+- **The Volume setting is back** in *Settings → Audio* ([#72](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/72)).
+
+### Recent releases
+
+- **v1.7.4:** multi frame generation (2x, 3x or 4x) for AMD FSR 3.1 and NVIDIA DLSS, smoother frame generation spaced to fit your display or your frame rate cap, and NVIDIA DLSS keeps 3x or 4x when a game is started again.
+- **v1.7.3:** a home screen just for Fortune's Weave; Xbox or PlayStation button icons in the game that follow your mapping; and frame generation no longer halves the frame rate for seconds at a time ([#55](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/55)).
+- **v1.7.2:** no more orange blocks and yellow bars on battle maps ([#60](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/60)); no more black characters on some graphics cards ([#69](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/69)); smoother exploring on graphics cards with less than 8 GB ([#70](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/70)); no more blocky textures after one bad start ([#71](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/71)); the game no longer starts again after stopping it with F5 ([#67](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/67)); and sharp game icons ([#68](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/68)).
+- **v1.7.1:** no more hang at game start on some AMD cards ([#65](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/65)); Mouse mode has its own page in Settings, and the scroll wheel only zooms on battle maps; Dagsion's sky no longer turns black after time in menus ([#64](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/64)); stutters no longer build up over long sessions ([#63](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/63)); and Kompas9's ultrawide v1.2.
+- **v1.7:** HD Rumble (experimental, off by default) through [RenHDrum](https://github.com/trzz1214/RenHDrum), on a Switch Pro Controller, Joy-Con, DualSense, Xbox controller or Steam Controller (2026), Windows only; and lips render properly ([#56](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/56), [#49](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/49)), with ASTC textures re-compressed to BC7 instead of BC3.
+- **v1.6.8.9:** no more broken textures or flashes after a few minutes in the same place ([#60](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/60)).
+- **v1.6.8.8:** NVIDIA DLSS frame generation no longer drags busy battles below 60 FPS; performance no longer drops map after map ([#55](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/55)); and the Discord Rich Presence setting is now in *Configure → General → Discord*.
 - **v1.6.8.7:** AMD FSR 3.1 frame generation no longer crashes after a few minutes ([#52](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/52)) and NVIDIA DLSS frame generation no longer crashes when the window changes; AMD FSR 4 works at 2x resolution and above ([#53](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/53)); menus, the map and teleports run at normal speed at 60 FPS again ([#51](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/51)); pausing no longer fast-forwards cutscenes ([#54](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/54)); games in very deep folders load ([#48](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/48)); and optional Discord Rich Presence.
 - **v1.6.8.6:** 60 FPS mode plays menus and other UI animations, and prints spoken text, at their normal speed instead of twice as fast ([#46](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/46)); reactive flushing is on by default, so cutscene effects such as dust clouds no longer jump; and menu check boxes no longer overlap the text in the dark themes ([#39](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/39)).
 - **v1.6.8.5:** 60 FPS mode no longer freezes the game on Continue with mods whose code reaches the game's other modules, such as settings mods ([#45](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/45)).
@@ -33,31 +50,23 @@ It builds on [Duck912's Fortune's Weave fork](https://github.com/Duck912/eden-ns
 - **v1.6.8:** frame generation (experimental): AMD FSR 3.1 on any card, or NVIDIA DLSS on GeForce RTX 40/50, so 60 FPS shows as 120. The game's UI stays still.
 - **v1.6.8:** the main settings are on the launch screen, beside Play: 60 FPS, Ultrawide, HDR, upscaler, quality and frame generation.
 - **v1.6.8:** video memory no longer creeps up over long sessions ([#35](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/35), [#37](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/37), [#38](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/38)), and 60 FPS mode works with mods ([#30](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/30)).
-- **v1.6.7.4:** a real 60 FPS mode (*Settings → Performance*): game speed follows your frame rate from 30 to 60 FPS, so no slow motion below 60, and capes and hair move smoothly.
-- **v1.6.7.4:** new *Performance* page: Reflections, Ambient occlusion and Reduced crowd detail.
-- **v1.6.7.4:** video memory creeps up far less in long sessions.
-- **v1.6.7.3:** mouse mode: your PC mouse drives the game's Joy-Con mouse cursor (button at the bottom of the window, or Ctrl + Enter).
-- **v1.6.7.3:** faster cutscenes ([#22](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/22)) and busy scenes such as the Saramis Guesthouse ([#27](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/27)); fixes for long sessions.
-- **v1.6.7.3:** volume is always 100% (use your PC's volume).
-- **v1.6.7.2:** players who updated from v1.6.2 or earlier and were still on the game's own DLSS are moved to AMD FSR 3.1, the default, once.
-- **v1.6.7.1:** updated installs now get the tuned image and speed settings too (vsync Mailbox, asynchronous shaders, 16x filtering).
-- **v1.6.7.1:** text fits in buttons and lists at Windows display scaling.
-- **v1.6.7.1:** no more "Decryption keys are missing" question at startup.
 
-v1.6.7 brought the new look (theme, icon and launch screen) and a much shorter Settings window. Every version is in the [changelog](CHANGELOG.md).
+Every version is in the [changelog](CHANGELOG.md).
 
 ## Highlights
 
 | Feature | What you get |
 |---|---|
-| 🎮 **Launch screen** | The game's card with **Play** and the main settings beside it: 60 FPS, Ultrawide, HDR, upscaler, quality and frame generation |
+| 🎮 **Home screen** | Just Fortune's Weave: its icon and title logo, **Play**, and the main settings: 60 FPS, Ultrawide, HDR, HD Rumble, upscaler, quality, frame generation, DLDSR, button icons and the texture cache on disk |
+| 🕹️ **Button icons** | Xbox or PlayStation button icons in the game, following your controller mapping |
 | ✨ **Upscalers** | AMD FSR 3.1 (default, any card), AMD FSR 4 (Radeon), NVIDIA DLSS (GeForce RTX), with quality modes from Native/DLAA to Performance |
-| 🖱️ **Mouse mode** | Your PC mouse as the game's Joy-Con mouse cursor, with its own controls and sensitivity |
+| 🖱️ **Mouse mode** | Your PC mouse as the game's Joy-Con mouse cursor, with its own Settings page, controls and sensitivity, and the scroll wheel zooming battle maps |
 | 🖥️ **Ultrawide** | Optional 21:9 (3440x1440) with the HUD and menus kept at 16:9, using [Kompas9](https://github.com/Kompas9/Switch-Game-Patches)'s patch (game version 1.1.0) |
 | 🌈 **HDR** | The game's own Switch 2 HDR mode, with its brightness options |
-| ⚡ **Runs well** | PGO-optimised for this game, fewer shader stutters, smoother busy scenes |
+| 📳 **HD Rumble** | Experimental, off by default: the game's detailed vibration on a Switch Pro Controller, Joy-Con, DualSense, Xbox controller or Steam Controller (2026), through [RenHDrum](https://github.com/trzz1214/RenHDrum). Windows only |
+| ⚡ **Runs well** | PGO-optimised for this game, fewer shader stutters, smoother busy scenes, and textures kept on disk so places you've been load without stutter |
 | 🎞️ **60 FPS mode** | Built in, off by default: game speed follows your real frame rate (30–60 FPS) |
-| 🚀 **Frame generation** | Experimental: AMD FSR 3.1 (any card) or NVIDIA DLSS (RTX 40/50) doubles the frames shown, with the UI kept still |
+| 🚀 **Frame generation** | Experimental: AMD FSR 3.1 (any card) or NVIDIA DLSS (RTX 40/50) shows 2, 3 or 4 frames for each of the game's, with the UI kept still |
 | 🎛️ **Performance options** | Lighter reflections, ambient occlusion, crowd and scenery detail for slower PCs |
 | 🔄 **Auto-updates** | Asks first, checks the download, never touches saves or settings |
 | 💾 **Portable** | Settings, saves and shader cache live next to the .exe |
@@ -82,8 +91,8 @@ v1.6.7 brought the new look (theme, icon and launch screen) and a much shorter S
 
 1. Download the [latest release](../../releases/latest) (`FEFW-Stable-60FPS-Portable.zip`, about 74 MB).
 2. Extract the whole folder somewhere outside Program Files and run `Fortune's Eden.exe`.
-3. Double-click the empty game list and choose the folder containing your game (or use *File → Load File* to open a `.nup` directly).
-4. The game's card appears at the top: press **Play**.
+3. Press **Choose game folder** and choose the folder containing your game (or use *File → Load File* to open a `.nup` directly).
+4. The home screen shows the game: press **Play**.
 
 **Updating:** Fortune's Eden checks for new versions when it starts and asks before installing one (or press **Check for Updates**). Your saves, settings and shader cache are kept.
 
@@ -101,28 +110,34 @@ The game draws its 3D scene at 720p and upscales it. Choose what does that in *S
 | **NVIDIA DLSS** | GeForce RTX | The best picture. Click **Download from NVIDIA** in the panel below the setting and accept NVIDIA's licences (NVIDIA's files aren't included). |
 | **Game's own DLSS** | Any | The game's own small network, run as compute passes. Some prefer its look; it costs the emulator more. |
 
-NVIDIA DLSS and FSR 4 fall back to FSR 3.1 if they can't start. The status bar and the launch screen show which one is running, e.g. *NVIDIA DLSS - DLAA*.
+NVIDIA DLSS and FSR 4 fall back to FSR 3.1 if they can't start. The status bar and the home screen show which one is running, e.g. *NVIDIA DLSS - DLAA*.
+
+**Recommended: 1X resolution with DLSS (or DLAA), plus DLDSR.** At 1X the upscaler rebuilds the detail at the quality you choose, for much less than a higher resolution costs; at other resolutions it runs at Performance, and the home screen offers a **Use 1X** button.
+
+**DLDSR (fullscreen):** turn on DLDSR in the NVIDIA app (*Graphics → DSR - Factors*) and choose **1.78x** or **2.25x** on the home screen. In fullscreen your monitor then runs at that resolution (2.25x on a 1440p monitor: 4K), the upscaler draws to it, and NVIDIA's AI filter scales it down, for a sharper, steadier picture. It takes more of your graphics card. The desktop goes back to its own resolution when you leave fullscreen, switch to another window or close Fortune's Eden. On AMD cards it's **VSR** (*AMD Software → Display → Virtual Super Resolution*), with every factor the driver offers. Windows only.
 
 **Upscaler quality** (at **1X** resolution) sets how big the 3D scene is drawn before upscaling, while menus and text stay sharp at 1440p: **Native** (DLAA with DLSS), **Ultra Quality**, **Quality**, **Balanced** (default) or **Performance**. Higher looks better and costs more GPU time. With the game's own DLSS it always runs at Performance.
 
 ## Frame generation (experimental)
 
-**Frame generation** makes a frame between each two of the game's, so 60 FPS shows as 120 (or 30 as 60). Choose it on the launch screen or in *Settings → Graphics → Frame generation*; it's off by default and applies when the game starts.
+**Frame generation** makes frames between the game's: at **2x**, 60 FPS shows as 120 (or 30 as 60); **3x** and **4x** make two or three for each of the game's. Choose it, and how many (**Frames** on the home screen, **Multi frame generation** in *Settings → Graphics*), on the home screen or in *Settings → Graphics → Frame generation*; it's off by default and applies when the game starts.
 
 | Option | Cards | Notes |
 |---|---|---|
 | **AMD FSR 3.1** | Any | AMD's FidelityFX SDK frame interpolation and optical flow, built in. |
-| **NVIDIA DLSS** | GeForce RTX 40/50 | Needs hardware-accelerated GPU scheduling on in Windows. Choose it, then click **Download from NVIDIA** in the panel below the setting and accept NVIDIA's licences (NVIDIA's files aren't included). Falls back to AMD's if it can't start. |
+| **NVIDIA DLSS** | GeForce RTX 40/50 | Needs hardware-accelerated GPU scheduling on in Windows. Choose it, then click **Download from NVIDIA** in the panel below the setting and accept NVIDIA's licences (NVIDIA's files aren't included). Falls back to AMD's if it can't start. 3x and 4x: RTX 50, or RTX 40 and older with the community [MFG Unlocker](https://github.com/dashdogy/MFG-Unlocker) (by dashdogy, MIT), which Fortune's Eden offers to download; there, FSR 3.1 at 3x or 4x is usually smoother. |
+
+**Pacing:** the game's frames are held to what your display can show with the made frames between them (a 165 Hz display at 3x: about 54 a second), evenly, and in 60 FPS mode the game's speed follows. If you cap your frame rate (NVIDIA Reflex, RTSS or the driver), type your cap in **Your frame rate cap** (home screen or Settings) so the frames fit under it.
 
 It works with any upscaler, HDR and ultrawide. The game's UI is kept still, so menus, prompts and the minimap don't ghost when the camera moves. It only runs in the 3D scenes (menus and movies have no motion data), needs a display faster than the game's frame rate (120 Hz or more for 60 FPS), and adds about half a frame of input delay. The status bar shows which one is running.
 
 ## HDR
 
-Fortune's Weave has an HDR mode on Switch 2. Turn on HDR in Windows (*Settings → System → Display → Use HDR*), tick **HDR output (HDR10)** in *Settings → Graphics* (or **HDR** on the launch screen), and start the game. **Paper white** sets how bright the game's white is. Its *Brightness* and *UI Brightness* options then adjust the picture. The game checks for HDR once when it starts, so restart it after changing either setting.
+Fortune's Weave has an HDR mode on Switch 2. Turn on HDR in Windows (*Settings → System → Display → Use HDR*), tick **HDR output (HDR10)** in *Settings → Graphics* (or **HDR** on the home screen), and start the game. **Paper white** sets how bright the game's white is. Its *Brightness* and *UI Brightness* options then adjust the picture. The game checks for HDR once when it starts, so restart it after changing either setting.
 
 ## 60 FPS mode
 
-**30 FPS is how Fortune's Weave runs on Switch 2**, and it's how this build runs by default. The built-in **60 FPS mode** is off by default: turn it on in *Settings → Graphics → 60 FPS mode* (or **60 FPS** on the launch screen) and start the game.
+**30 FPS is how Fortune's Weave runs on Switch 2**, and it's how this build runs by default. The built-in **60 FPS mode** is off by default: turn it on in *Settings → Graphics → 60 FPS mode* (or **60 FPS** on the home screen) and start the game.
 
 Unlike the old 60 FPS cheat, which forced a fixed 60 and made the whole game run in slow motion whenever a PC fell below it, game speed follows your real frame rate anywhere from 30 to 60 FPS. About 50 places in the game that counted per frame (the map cursor and markers, menus, physics, cutscene shake, character creation and more) were traced and fixed so they keep their normal speed, and capes and hair are simulated every frame with physics scaled to the frame time. It was made for game version 1.1.0; on other versions it turns on when every place it changes is found. It works alongside mods, including those that use the free space after the game's code its routines usually take (they then go in memory Fortune's Eden adds), and turns itself off (the mod still works) only if a mod changes the same game code. An old `60fps` add-on folder becomes the setting.
 
@@ -195,4 +210,18 @@ That gives `FEFW-Stable-60FPS-Portable` (with `Fortune's Eden.exe`) and a zip of
 
 ## Credits and licence
 
-Built on [Eden](https://eden-emu.dev), [Duck912's Fortune's Weave fork](https://github.com/Duck912/eden-ns2-fe) and [xDarkWindx's 1.12 release](https://github.com/xDarkWindx/eden-fefw), with the NUP loader, AMD fix and NVIDIA DLSS support from [Djihads80's Eglantine](https://github.com/Djihads80/Eglantine) (Duck912, arisqz), and shader reuse and shutdown fixes from PokeDinner (Wael3rd, kraibse, Takoroka). AMD FSR 3.1 is built from AMD's FidelityFX SDK (MIT) with the upscaler from Eglantine (Duck912); AMD FSR 4 is AMD's own signed FSR 4.1.2 Vulkan library from the FSR SDK 2.4, redistributed unmodified under the FidelityFX SDK licence (`licenses\amd-fsr4`). AMD and FidelityFX are trademarks of AMD; this project is not made or endorsed by AMD. NVIDIA DLSS and Streamline are NVIDIA's; none of NVIDIA's files are included. Licensed under **GPL-3.0-or-later**; the full source for this build is included as `source.zip` in each release download. Not affiliated with, endorsed by or sponsored by Nintendo or NVIDIA. For use only with games, keys and firmware legally dumped from your own console; see the legal notice at the top.
+Fortune's Eden stands on a lot of other people's work. Thank you to all of them:
+
+- **[Eden](https://eden-emu.dev)** and the yuzu project before it: the emulator itself.
+- **Duck912's Fortune's Weave fork** (eden-ns2-fe) and **xDarkWindx's eden-fefw 1.12** (both no longer online): the Switch 2 and Fortune's Weave support this build starts from.
+- **[Djihads80's Eglantine](https://github.com/Djihads80/Eglantine)**: the NUP loader, the AMD fix and NVIDIA DLSS support (Duck912, arisqz), the AMD FSR 3.1 upscaler (Duck912), and fixes by Felipe Lima (failed pipeline draws), Zarigis (graphics memory writes), kraibse (textures rewritten by the game), zortos293 (alpha-test pipelines), and Zortos and Kaj (accurate waits on AMD and Intel CPUs).
+- **Franseven**: shader and Vulkan fixes ported from Eden-NS2.
+- **PokeDinner** (Wael3rd, kraibse, Takoroka): shader reuse and shutdown fixes.
+- **[Kompas9](https://github.com/Kompas9/Switch-Game-Patches)**: the ultrawide 21:9 patch (MIT, `licenses\ultrawide-kompas9`).
+- **[RenHDrum](https://github.com/trzz1214/RenHDrum)** by Three-Dola and contributors: HD Rumble (`renhdrum.dll`, MIT / Apache-2.0, `licenses\renhdrum`), with its Eden integration by **samaBR85** and the Steam Controller (2026) grip research by iafx and LiveHaptics.
+- **AMD**: AMD FSR 3.1 and FSR 3.1 frame generation are built from AMD's FidelityFX SDK (MIT, `licenses\amd-fidelityfx-sdk`); AMD FSR 4 is AMD's own signed FSR 4.1.2 Vulkan library from the FSR SDK 2.4, redistributed unmodified under the FidelityFX SDK licence (`licenses\amd-fsr4`). AMD and FidelityFX are trademarks of AMD; this project is not made or endorsed by AMD.
+- **[dav1d](https://code.videolan.org/videolan/dav1d)** by VideoLAN: fast AV1 decoding for the pre-rendered cutscenes (BSD 2-clause, `licenses\dav1d`).
+- **NVIDIA**: DLSS and Streamline are NVIDIA's, downloaded from NVIDIA by the settings; none of NVIDIA's files are included.
+- **Everyone who reports problems** and sends logs, saves and test results: most fixes here started with one of your reports.
+
+Licensed under **GPL-3.0-or-later**; the full source for this build is included as `source.zip` in each release download, and each release's exact source is on a `source-v<version>` branch. Not affiliated with, endorsed by or sponsored by Nintendo, NVIDIA or AMD. For use only with games, keys and firmware legally dumped from your own console; see the legal notice at the top.

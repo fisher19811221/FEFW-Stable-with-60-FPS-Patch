@@ -1,5 +1,186 @@
 # Changelog
 
+## v1.7.5.4
+
+- **No more texture pop-in at cutscene cuts** ([#74](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/74)). A cut needs a whole new scene's textures at once, and those read from the texture cache on disk that weren't ready in time were drawn empty for a few frames. A frame now waits for them (up to 40 ms in all, with up to 8 read at a time), and any still not ready are converted on the GPU at once, as before the cache. So a cut or a new area costs a brief hitch at most, never pop-in.
+
+Everything else is as in [v1.7.5.3](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/releases/tag/v1.7.5.3).
+
+## v1.7.5.3
+
+- **No more black textures for a split second when arriving somewhere you've been.** Textures from the texture cache on disk were read in the background and could be drawn a frame or two before they were ready, showing black. They're now read 4 at a time, and one the game is about to draw is uploaded first (waiting up to 4 ms a frame in all; most take 1–2 ms).
+
+Everything else is as in [v1.7.5.2](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/releases/tag/v1.7.5.2).
+
+## v1.7.5.2
+
+Smoother long sessions on 10 and 12 GB graphics cards, and steadier NVIDIA DLSS frame generation.
+
+- **No more stutter when selecting units on battle maps after a long session** ([#63](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/63)). v1.7.5 was meant to keep more textures loaded on cards with 10 GB or more, but it compared against the memory Fortune's Eden may use (about three quarters of the card), so only 16 GB cards got it. A 12 GB card started cleaning up with over 2.5 GB still unused, and on battle maps freed and reloaded about 3,500 textures a minute, which stuttered whenever a unit's portrait and menus were loaded. 10 and 12 GB cards now clean up from 85% too.
+- **NVIDIA DLSS frame generation stays on through short gaps.** When the game had no motion for a frame or two in the middle of play, DLSS frame generation switched off and straight back on, which restarts NVIDIA's frame pacing for a hitch of its own. It now rides through gaps of up to 6 frames. Menus, loading screens and movies still switch it off.
+
+Everything else is as in [v1.7.5.1](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/releases/tag/v1.7.5.1).
+
+## v1.7.5.1
+
+A fix for freezes on hard drives in v1.7.5.
+
+- **No more freezes on hard drives.** v1.7.5's texture cache on disk reads and writes many small files while you explore, and on a hard drive the game's own reads (its maps and movies) had to wait behind them, for freezes of a few seconds. When Fortune's Eden is on a hard drive the cache is now off, and the home screen says so. On an SSD it works as before.
+
+Everything else is as in [v1.7.5](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/releases/tag/v1.7.5).
+
+## v1.7.5
+
+Much less stutter in places you've been before, with textures kept on disk, steadier long sessions, and DLDSR in fullscreen.
+
+#### 💾 Texture cache on disk
+
+- **Places you've been load without stutter** ([#63](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/63)). The game's textures are ASTC, which PC graphics cards can't use, so each one is converted on the GPU the first time it's seen, and again whenever it was cleaned out of video memory. Converted textures are now kept on disk (in `user\cache\textures`), so a texture seen before is loaded instead. Choose the size with **Texture cache on disk** on the home screen: **2 GB** (default), **4 GB**, **8 GB** or **Off**. The oldest are dropped once it's full. Most useful on graphics cards with less video memory.
+- Textures are read from disk in the background and uploaded a few at a time, so arriving somewhere doesn't hold up the frame.
+
+#### 🧹 Video memory
+
+- **Steadier over long sessions** ([#63](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/63)). Images from earlier scenes (and dungeons) unused for 5 minutes are now cleaned up once memory is getting full, instead of being kept until the hard limit while the game's own textures were evicted and loaded again. The sky in use is still kept.
+- **Cards with 10 GB or more** start cleaning up at 85% of their video memory (92% for the hard limit), so more stays loaded.
+- **Bursts of new textures no longer stall the frame:** spare video memory is used instead of waiting for the GPU every few textures, staying below the cleanup level.
+
+#### 🖥️ DLDSR in fullscreen
+
+- **DLDSR (fullscreen)** on the home screen: with NVIDIA's DLDSR on (*NVIDIA app → Graphics → DSR - Factors*), choose **1.78x** or **2.25x**, and fullscreen plays at that resolution. The upscaler draws to it and NVIDIA's AI filter scales it down to your monitor: with DLSS or DLAA, the sharpest picture. The desktop goes back to its own resolution when you leave fullscreen, switch to another window or close Fortune's Eden. Windows only.
+- **On AMD cards it's VSR** (*AMD Software → Display → Virtual Super Resolution*), with every factor the driver offers.
+- **1X resolution is recommended:** at other resolutions, the home screen says why and offers a **Use 1X** button.
+- The home screen's settings are in three rows, so nothing is cut off.
+
+#### 🔧 Fixes ported from Lichii and Orchid
+
+- **Geometry shaders are drawn** instead of the draws being skipped (ported from [Lichii](https://github.com/zortos293/Lichii) and [Orchid](https://github.com/MythosOfs/Orchid), GPL-3.0), with fixes for them on AMD and Intel cards.
+- **Texture cache and memory fixes:** cleanups that freed nothing, images over memory the CPU changed, uploads and copies seen by every stage that uses them, and bounds checks in the texture decoders (which could write into other images on AMD).
+- Faster texture unswizzling (from Eglantine).
+
+#### 🔊 Audio
+
+- **The Volume setting is back** in *Settings → Audio* (0–200%) ([#72](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/72)).
+
+Everything else is as in [v1.7.4](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/releases/tag/v1.7.4).
+
+## v1.7.4
+
+Multi frame generation (3x and 4x) for AMD FSR 3.1 and NVIDIA DLSS, and much smoother frame generation.
+
+#### 🚀 Frame generation
+
+- **Multi frame generation.** Choose **2x**, **3x** or **4x** (**Frames** on the home screen, **Multi frame generation** in *Settings → Graphics*): at 3x and 4x, two or three frames are made for each of the game's, so 60 FPS can fill a 165 Hz or 240 Hz display.
+  - **AMD FSR 3.1:** 3x and 4x on any card.
+  - **NVIDIA DLSS:** NVIDIA allows 3x and 4x on GeForce RTX 50 cards only. On RTX 40 and older, choosing 3x or 4x offers to download the community [MFG Unlocker](https://github.com/dashdogy/MFG-Unlocker) by dashdogy (MIT licence, not made by NVIDIA and not included in Fortune's Eden). It's checked before it's used. On those cards, FSR 3.1 at 3x or 4x is usually smoother, because RTX 40 cards lack the RTX 50's hardware frame pacing.
+- **Much smoother frame generation.** The game's frames are now spaced evenly to fit what your display can show with the made frames between them (a 165 Hz display at 3x: about 54 game frames a second). In 60 FPS mode the game's speed follows, as it always does between 30 and 60 FPS.
+- **Your frame rate cap.** If you cap your frame rate (NVIDIA Reflex, RTSS or the driver), type the cap in **Your frame rate cap** on the home screen or in *Settings → Graphics*, so the frames fit under it rather than some being dropped. With NVIDIA DLSS, the same rate goes to NVIDIA Reflex's frame limiter.
+- **NVIDIA DLSS keeps 3x or 4x when a game is started again.** A game with NVIDIA DLSS starts in a new Fortune's Eden; the new one used to fall back to 2x with the MFG Unlocker, and didn't write its log.
+
+Everything else is as in [v1.7.3](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/releases/tag/v1.7.3).
+
+## v1.7.3
+
+A new home screen just for Fortune's Weave, Xbox and PlayStation button icons in the game, and frame generation that no longer halves the frame rate for seconds at a time.
+
+#### 🏠 Home screen
+
+- **Fortune's Weave only.** The game list is gone: the home screen shows the game's icon with its own title logo (read from your copy of the game), the version and play time, **Play**, and a panel with the main settings: 60 FPS, Ultrawide, HDR and paper white, HD Rumble, upscaler and quality, frame generation and button icons.
+- **Performance Settings, Game Settings, Settings and Check for Updates** sit under the settings, and the **⋯** button has what the game list's right-click menu did: add a game folder, open the save or mods folder, and install an update or DLC.
+- **Until the game is found,** the home screen asks for the folder that holds it, with a **Choose game folder** button.
+- **No multiplayer menu or room status.** Fortune's Eden doesn't use Eden's multiplayer rooms, so the *Multiplayer* menu and the "Not Connected" text at the bottom of the window are gone.
+
+#### 🎮 Button icons
+
+- **Xbox or PlayStation button icons in the game.** Choose **Button icons** on the home screen or in *Settings → Controls*: Nintendo Switch (the game's own), Xbox or PlayStation. The game's button pictures are redrawn as it loads them, in your copy only: face buttons, LB/RB and LT/RT (L1/R1, L2/R2), Menu and View (Options and Create), and the d-pad.
+- **They follow your mapping.** Each of the game's A, B, X and Y shows the controller button you have it on. With the usual mapping, the game's A (confirm) shows Xbox B or PlayStation ○, the button on the right.
+- **The mouse mode prompt shows your shortcut.** Where the game shows SL + SR for switching mouse mode, it now shows Fortune's Eden's own shortcut (Ctrl + Enter by default, or whatever you set it to).
+- The icons are drawn as the game starts: if you change them, your controls or the shortcut during a game, Fortune's Eden says they'll update next time you start it.
+
+#### 🚀 Frame generation
+
+- **No more frame rate halving for seconds at a time** ([#55](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/55)). Frame generation (AMD FSR 3.1 and NVIDIA DLSS) paused whenever the graphics card's work briefly backed up, which mostly happens for a moment as the game enters a new area. Each pause could last up to 4 seconds. It now only pauses when the work stays backed up for about a second, comes back as soon as it clears, and doesn't pause at all when pausing wouldn't help.
+
+Everything else is as in [v1.7.2](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/releases/tag/v1.7.2).
+
+## v1.7.2
+
+Fixes for coloured blocks on battle maps, black characters on some graphics cards, stutters on smaller graphics cards, blocky textures after one bad start, and a game that restarted after stopping it.
+
+#### 🔧 Fixes
+
+- **No more orange blocks and yellow bars on battle maps** ([#60](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/60)). With reactive flushing on (the default), the graphics card's data was copied back into the game's memory at the wrong moment and could overwrite something the game had just written there. The cursor and the movement paths were drawn from those lost writes. Writes the game hasn't sent yet are now left alone.
+- **No more black characters on some graphics cards** ([#69](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/69)). As the game starts, the graphics card now converts a few test textures to BC7 and Fortune's Eden checks them. If they come out wrong, it uses BC3 instead.
+- **Smoother exploring on graphics cards with less than 8 GB** ([#70](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/70)). BC7 takes much more work to make than BC3, and on a 4 GB card that made exploring stutter. Those cards now use BC3, as v1.6.8.9 did.
+- **No more blocky textures after one bad start** ([#71](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/71)). v1.7.1 switched to BC3 until the next update after a single start that ended before the game's first frames, even if the game had just crashed or been closed for another reason. It now takes two such starts in a row.
+- **The game no longer starts again after stopping it with F5** ([#67](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/67)). A button still held as the game stopped could press Play on the home screen. Play is now ignored for 1.5 seconds after a stop.
+- **Sharp game icons** ([#68](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/68)) on the home screen and in the game list, on scaled screens too.
+
+Everything else is as in [v1.7.1](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/releases/tag/v1.7.1).
+
+## v1.7.1
+
+A fix for v1.7 not starting on some AMD cards, a Mouse mode page in Settings, a scroll wheel that only zooms where it should, and fixes for a black sky, long-session stutters and textures the game rewrites.
+
+#### 🖱️ Mouse mode
+
+- **Its own page in Settings.** *Configure → Mouse mode* has the mouse sensitivity, a **Mouse wheel zooms on battle maps** box, and a **Mouse controls** tab where you set the keys and buttons used while mouse mode is on. The Controls page now always shows your normal controls.
+- **The scroll wheel only zooms on battle maps.** It used to push the left stick, which zooms on battle maps but walked you forwards and backwards everywhere else. Outside battle maps it now does nothing.
+- **WASD works in mouse mode.** With a controller set up, the mouse set of controls had no keyboard keys, so WASD did nothing. Turning mouse mode on now gives it the default keyboard controls once (WASD moves), if it has none.
+
+#### 🖥️ Ultrawide
+
+- **Kompas9's ultrawide v1.2:** the radar charts on the unit Stats page now sit inside the centred 16:9 area.
+
+#### 🔧 Fixes
+
+- **No more hang at game start on some AMD cards** ([#65](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/65)). v1.7 converts textures to BC7 with a converter the graphics driver builds as the game starts, and on some AMD drivers that build never finished. If it isn't ready within 10 seconds, Fortune's Eden now uses BC3 (as v1.6.8.9 did) and the game starts; it remembers that, and tries BC7 again after a driver or Fortune's Eden update.
+- **Dagsion's sky no longer turns black after time in menus** ([#64](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/64)). The sky is drawn once and then kept in use; while a shop or other menu covered the screen for a minute, graphics memory cleanup freed it. Anything drawn in the current scene is now kept until the next loading screen.
+- **No more stutters building up over long sessions** ([#63](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/63)). When there was nothing to clean up, the graphics memory cleanup still ran every frame, and each run got slower as the session went on (on a 12 GB card, from 37 ms a minute to 940 ms a minute after 18 minutes). It now waits half a second after a run that found nothing.
+- **Textures the game rewrites no longer come back wrong** ([#60](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/60)). When the game rewrote a texture after the graphics card had drawn into it, an older drawn copy could win over the new data. Whichever was written last now wins. Ported from Eglantine (kraibse).
+
+Everything else is as in [v1.7](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/releases/tag/v1.7).
+
+## v1.7
+
+HD Rumble for your controller (experimental), and lips that render properly.
+
+#### 🎮 HD Rumble (experimental)
+
+- **The game's detailed vibration on your controller.** Tick **HD Rumble** on the launch screen (beside HDR), then restart Fortune's Eden or reconnect your controller. Fortune's Weave sends fine-grained vibration, and [RenHDrum](https://github.com/trzz1214/RenHDrum) plays it as HD Rumble on a Switch Pro Controller or Joy-Con, as haptics on a DualSense, as rumble on Xbox controllers, and on the grips of the Steam Controller (2026, experimental). Off by default; with it off, rumble is the same as before. Windows only for now.
+
+#### 🎨 Graphics
+
+- **Lips render properly** ([#56](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/56), [#49](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/49)). The game's textures are stored as ASTC, which most PC graphics cards can't read, so Fortune's Eden re-compresses them on the graphics card. They used to go to BC3, which can't hold textures that keep separate masks in red, green and blue, such as the lips one. They now go to BC7: the same video memory, and more accurate across the board.
+
+Everything else is as in [v1.6.8.9](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/releases/tag/v1.6.8.9).
+
+RenHDrum is by Three-Dola and contributors (MIT / Apache-2.0); Fortune's Eden uses its Eden integration by samaBR85.
+
+## v1.6.8.9
+
+A fix for broken textures and flashes that v1.6.8.8 brought in.
+
+#### 🔧 Fixes
+
+- **No more broken textures or flashes after a few minutes in the same place** ([#60](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/60)). v1.6.8.8 cleared out graphics data unused for 5 minutes, and some of what it cleared had been drawn by the game itself. It came back wrong: broken textures when selecting units, texture errors on the world map and in caves, dungeon floors flashing blue, or a bright white flash. That clean-up is gone. Graphics memory is still freed at every loading screen, so the #55 fix stays.
+
+Everything else is as in [v1.6.8.8](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/releases/tag/v1.6.8.8).
+
+## v1.6.8.8
+
+Steady frame generation in busy battles, smooth play map after map, and the Discord setting you can actually reach.
+
+#### 🎨 Graphics
+
+- **NVIDIA DLSS frame generation no longer drags busy battles below 60 FPS.** In battles full of lit effects (many torches and magic floor tiles), one stall could leave the graphics card's work piling up faster than it could be sent, and frames reached the screen late. Frame generation now steps aside for a moment when that happens, usually a quarter of a second, and comes back on as soon as the backlog has cleared.
+
+#### 🔧 Fixes
+
+- **Performance no longer drops map after map** ([#55](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/issues/55)). Battle maps keep loading small files while you play, so the loading screen between them was never recognised and the previous map's textures stayed in graphics memory. Loading screens in battles are now caught, and textures unused for 5 minutes are freed.
+- **Discord Rich Presence can be turned on.** In v1.6.8.7 its setting was on a tab that wasn't shown anywhere. It's now in *Configure → General → Discord*.
+
+Everything else is as in [v1.6.8.7](https://github.com/TheSneakyBadger/FEFW-Stable-with-60-FPS-Patch/releases/tag/v1.6.8.7).
+
 ## v1.6.8.7
 
 Fixes for frame generation crashes, AMD FSR 4 at high resolutions, menu speed at 60 FPS, and pausing during cutscenes.
